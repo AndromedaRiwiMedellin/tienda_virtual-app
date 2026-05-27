@@ -109,3 +109,11 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+html, body, #root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: #f1f5f9 !important; /* Fuerza el gris claro en toda la pantalla */
+  overflow-x: hidden;
+}
