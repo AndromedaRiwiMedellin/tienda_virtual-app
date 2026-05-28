@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:5000/api";
 
-// Función de Inicio de Sesión (Login) - ¡CORREGIDA!
+// 1. Función de Inicio de Sesión (Login)
 export async function login(email, password) {
     const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
@@ -22,7 +22,7 @@ export async function login(email, password) {
     return response.json();
 }
 
-// Función de Registro de Usuarios - ¡ASEGURADA!
+// 2. Función de Registro de Usuarios
 export async function register(fullName, email, password, confirmPassword) {
     console.log("Disparando petición HTTP a:", `${BASE_URL}/auth/register`);
 
@@ -58,4 +58,28 @@ export async function register(fullName, email, password, confirmPassword) {
     } catch (err) {
         return { message: "¡Cuenta registrada con éxito!" };
     }
+}
+
+// 🚀 3. NUEVA FUNCIÓN DE GOOGLE AUTENTICACIÓN (Agregada perfectamente usando tu BASE_URL)
+export async function googleAuth(googleId, email, fullName, profileImage) {
+    console.log("Disparando petición HTTP de Google a:", `${BASE_URL}/auth/google-auth`);
+
+    const response = await fetch(`${BASE_URL}/auth/google-auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ googleId, email, fullName, profileImage }),
+    });
+
+    if (!response.ok) {
+        let errorMessage = "Error en la autenticación con Google";
+        try {
+            const errorData = await response.json();
+            errorMessage = errorData.message || errorMessage;
+        } catch (e) {
+            errorMessage = `Error del servidor (${response.status})`;
+        }
+        throw new Error(errorMessage);
+    }
+
+    return response.json();
 }
