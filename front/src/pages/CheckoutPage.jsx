@@ -222,7 +222,7 @@ export default function CheckoutPage({ event, user, onBack }) {
 
           <div className="selected-seat-strip">
             {selectedSeats.length === 0 ? (
-              <span>Selecciona uno o más asientos del mapa.</span>
+              <span>Selecciona uno o mas asientos del mapa.</span>
             ) : (
               selectedSeats.map((seat) => (
                 <strong key={seat.id}>{seat.seatNumber}</strong>

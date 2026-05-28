@@ -11,6 +11,8 @@ export default function EventDetailPage({ event, onBack, onCheckout }) {
     );
   }
 
+  const priceLabel = event.priceFrom > 0 ? `Desde ${formatCurrency(event.priceFrom)}` : 'Precio por confirmar';
+
   return (
     <section className="detail-layout">
       <button className="ghost-button" onClick={onBack}>
@@ -28,7 +30,7 @@ export default function EventDetailPage({ event, onBack, onCheckout }) {
             <span><CalendarDays size={18} /> {formatDate(event.date)}</span>
             <span><Clock size={18} /> {event.time}</span>
             <span><MapPin size={18} /> {event.venue}</span>
-            <span><Ticket size={18} /> Desde {formatCurrency(event.priceFrom)}</span>
+            <span><Ticket size={18} /> {priceLabel}</span>
           </div>
           <button className="primary-button" onClick={() => onCheckout(event.id)}>
             Seleccionar entradas

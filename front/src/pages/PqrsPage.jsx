@@ -35,9 +35,9 @@ export default function PqrsPage() {
       </form>
 
       <div className="status-panel">
-        <strong>Última solicitud</strong>
-        <span>PQRS-204 · En revisión</span>
-        <p>El equipo de soporte responderá desde el módulo administrativo.</p>
+        <strong>Ultima solicitud</strong>
+        <span>PQRS-204 - En revision</span>
+        <p>El equipo de soporte respondera desde el modulo administrativo.</p>
       </div>
     </section>
   );

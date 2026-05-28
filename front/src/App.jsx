@@ -77,6 +77,14 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('orbix_user');
+    setAuthReason('');
+    setView('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const navigate = (nextView) => {
     const privateViews = ['profile', 'history', 'favorites', 'checkout'];
     if (!isAuthenticated && privateViews.includes(nextView)) {
@@ -128,7 +136,7 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <Header activeView={view} isAuthenticated={isAuthenticated} onNavigate={navigate} />
+      <Header activeView={view} isAuthenticated={isAuthenticated} onLogout={handleLogout} onNavigate={navigate} />
       <main className="page-shell">
         {view === 'home' && (
           <HomePage

@@ -36,7 +36,7 @@ export default function HomePage({ events, filters, isLoading, onFiltersChange, 
       ) : filteredEvents.length === 0 ? (
         <section className="empty-state">
           <h2>No encontramos eventos con esos filtros.</h2>
-          <p>Prueba con otra ciudad, categoría o fecha para ver disponibilidad.</p>
+          <p>Prueba con otra ciudad, categoria o fecha para ver disponibilidad.</p>
         </section>
       ) : (
         <>
