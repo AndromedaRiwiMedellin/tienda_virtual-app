@@ -18,4 +18,26 @@ function App() {
   );
 }
 
+export default App;import React from 'react';
+// 🎯 Importamos la vista principal (Ajusta "Home" si tu archivo se llama diferente)
+import Home from './components/Home'; 
+
+function App() {
+  return (
+    <div style={{ 
+      minHeight: '100vh', 
+      backgroundColor: '#f1f5f9', 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center',
+      margin: 0,
+      padding: '20px',
+      boxSizing: 'border-box'
+    }}>
+      {/* 🎯 Cambiamos <Login /> por <Home /> para que cargue la vista principal de una */}
+      <Home />
+    </div>
+  );
+}
+
 export default App;
