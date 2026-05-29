@@ -89,7 +89,7 @@ export default function App() {
   };
 
   const navigate = (nextView) => {
-    const privateViews = ['profile', 'history', 'favorites', 'checkout', 'ticket'];
+    const privateViews = ['profile', 'history', 'favorites', 'checkout', 'ticket', 'pqrs'];
     if (!isAuthenticated && privateViews.includes(nextView)) {
       setAuthReason('Ingresa a tu cuenta para ver esta seccion de forma segura.');
       setView('login');
@@ -189,7 +189,7 @@ export default function App() {
           />
         )}
         {view === 'favorites' && <FavoritesPage events={events} onOpenEvent={openEvent} />}
-        {view === 'pqrs' && <PqrsPage />}
+        {view === 'pqrs' && <PqrsPage user={user} />}
         {view === 'login' && <LoginPage reason={authReason} onAuthenticated={handleAuthSuccess} />}
         {view === 'ticket' && <DigitalTicketPage purchase={activePurchase} onBack={() => navigate('history')} />}
       </main>

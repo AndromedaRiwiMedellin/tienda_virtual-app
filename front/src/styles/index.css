@@ -2294,6 +2294,39 @@ button {
   font-size: 1.12rem;
 }
 
+.pqrs-list {
+  display: grid;
+  gap: 12px;
+}
+
+.pqrs-item {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.pqrs-item span,
+.pqrs-item small {
+  display: block;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.pqrs-item strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink);
+}
+
+.pqrs-item p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
 .profile-purchases {
   grid-column: 1 / -1;
   display: grid;
