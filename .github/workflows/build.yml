@@ -14,8 +14,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          # Dejamos el cache desactivado por ahora para asegurar que pase limpio
-      - run: npm ci
+          
+      # CAMBIAMOS ESTA LÍNEA: De 'npm ci' a 'npm install'
+      - run: npm install
+      
       - run: npm run build
         env:
           VITE_API_BASE_URL: https://service.andromeda.andrescortes.dev
