@@ -1,14 +1,28 @@
 import { ArrowUpRight, Heart, MapPin } from 'lucide-react';
 import { formatCurrency, getDateParts } from '../utils/formatters.js';
 
-export default function EventCard({ event, onOpen, isFeatured = false }) {
+export default function EventCard({
+  event,
+  onOpen,
+  isFeatured = false,
+  isFavorite = false,
+  onToggleFavorite
+}) {
   const dateParts = getDateParts(event.date);
   const priceLabel = event.priceFrom > 0 ? `From ${formatCurrency(event.priceFrom)}` : 'Price to be confirmed';
 
   return (
     <article className={isFeatured ? 'event-card featured' : 'event-card'}>
-      <button className="favorite-dot" aria-label="Add to favorites">
-        <Heart size={17} />
+      <button
+        type="button"
+        className={isFavorite ? 'favorite-dot active' : 'favorite-dot'}
+        aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+        onClick={(clickEvent) => {
+          clickEvent.stopPropagation();
+          onToggleFavorite?.(event.id);
+        }}
+      >
+        <Heart size={17} fill={isFavorite ? 'currentColor' : 'none'} />
       </button>
       <div className="event-media" style={{ backgroundImage: `url(${event.image})` }}>
         <span className="date-chip">

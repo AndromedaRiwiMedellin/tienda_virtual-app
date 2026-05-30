@@ -443,6 +443,12 @@ button {
   border-radius: 50%;
   color: var(--navy);
   background: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+}
+
+.favorite-dot.active {
+  color: #fff;
+  background: var(--accent, #e11d48);
 }
 
 .event-media {

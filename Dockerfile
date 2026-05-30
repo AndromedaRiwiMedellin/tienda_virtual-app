@@ -1,7 +1,10 @@
 FROM node:22-alpine AS build
 WORKDIR /app
-# Default VITE_API_BASE_URL points to the production VPS backend
-ARG VITE_API_BASE_URL=https://204.168.212.239
+# Default matches VPS deploy at andromeda.andrescortes.dev (API on service subdomain).
+# For Docker-only with repo nginx.conf proxy, pass: --build-arg VITE_API_BASE_URL=/api
+ARG VITE_API_BASE_URL=https://service.andromeda.andrescortes.dev
+ARG VITE_MEDIA_BASE_URL=https://service.andromeda.andrescortes.dev
+ENV VITE_MEDIA_BASE_URL=$VITE_MEDIA_BASE_URL
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
 COPY package*.json ./

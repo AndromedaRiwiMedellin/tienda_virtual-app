@@ -3,7 +3,16 @@ import EventSection from '../components/EventSection.jsx';
 import SearchPanel from '../components/SearchPanel.jsx';
 import VenueStrip from '../components/VenueStrip.jsx';
 
-export default function HomePage({ events, filters, isLoading, onFiltersChange, onOpenEvent }) {
+export default function HomePage({
+  events,
+  filters,
+  isLoading,
+  loadError = '',
+  onFiltersChange,
+  onOpenEvent,
+  favoriteIds,
+  onToggleFavorite
+}) {
   const filteredEvents = events.filter((event) => {
     const query = filters.query.trim().toLowerCase();
     const matchesQuery = !query
@@ -28,7 +37,12 @@ export default function HomePage({ events, filters, isLoading, onFiltersChange, 
         onSelect={(category) => onFiltersChange({ ...filters, category })}
       />
 
-      {isLoading ? (
+      {loadError ? (
+        <section className="empty-state">
+          <h2>Could not load events.</h2>
+          <p>{loadError}</p>
+        </section>
+      ) : isLoading ? (
         <section className="empty-state">
           <h2>Loading events.</h2>
           <p>We are preparing the lineup for you.</p>
@@ -46,12 +60,16 @@ export default function HomePage({ events, filters, isLoading, onFiltersChange, 
             events={featuredEvents.length ? featuredEvents : filteredEvents.slice(0, 2)}
             onOpen={onOpenEvent}
             featured
+            favoriteIds={favoriteIds}
+            onToggleFavorite={onToggleFavorite}
           />
           <EventSection
             title="Available lineup"
             subtitle="On sale"
             events={regularEvents.length ? regularEvents : filteredEvents.slice(2)}
             onOpen={onOpenEvent}
+            favoriteIds={favoriteIds}
+            onToggleFavorite={onToggleFavorite}
           />
           <VenueStrip />
         </>

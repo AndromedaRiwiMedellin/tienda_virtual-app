@@ -1,6 +1,14 @@
 import EventCard from './EventCard.jsx';
 
-export default function EventSection({ title, subtitle, events, onOpen, featured = false }) {
+export default function EventSection({
+  title,
+  subtitle,
+  events,
+  onOpen,
+  featured = false,
+  favoriteIds = [],
+  onToggleFavorite
+}) {
   return (
     <section className="event-section">
       <div className="section-heading">
@@ -12,7 +20,14 @@ export default function EventSection({ title, subtitle, events, onOpen, featured
 
       <div className={featured ? 'featured-grid' : 'events-grid'}>
         {events.map((event) => (
-          <EventCard key={event.id} event={event} onOpen={onOpen} isFeatured={featured} />
+          <EventCard
+            key={event.id}
+            event={event}
+            onOpen={onOpen}
+            isFeatured={featured}
+            isFavorite={favoriteIds.some((id) => String(id) === String(event.id))}
+            onToggleFavorite={onToggleFavorite}
+          />
         ))}
       </div>
     </section>

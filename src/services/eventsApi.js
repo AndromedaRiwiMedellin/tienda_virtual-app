@@ -51,8 +51,7 @@ function getFallbackImage(title = '', category = '') {
 function toAbsoluteImage(posterUrl, title = '', category = '') {
   if (posterUrl?.startsWith('http')) return posterUrl;
   if (posterUrl) {
-    const absoluteUrl = `${MEDIA_BASE_URL}/${posterUrl.replace(/^\/+/, '')}`;
-    return absoluteUrl.includes('/posters/') ? getFallbackImage(title, category) : absoluteUrl;
+    return `${MEDIA_BASE_URL}/${posterUrl.replace(/^\/+/, '')}`;
   }
 
   return getFallbackImage(title, category);

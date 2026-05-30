@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import Header from './components/Header.jsx';
-import { events as fallbackEvents } from './data/events.js';
 import CheckoutPage from './pages/CheckoutPage.jsx';
 import DigitalTicketPage from './pages/DigitalTicketPage.jsx';
 import EventDetailPage from './pages/EventDetailPage.jsx';
@@ -10,6 +9,7 @@ import HomePage from './pages/HomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import PqrsPage from './pages/PqrsPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
+import { getFavoriteIds, toggleFavorite } from './services/favoritesApi.js';
 import { getEvent, getEvents } from './services/eventsApi.js';
 import { addStoredPurchase } from './services/ticketStorage.js';
 
@@ -33,18 +33,41 @@ export default function App() {
   const [user, setUser] = useState(getStoredUser);
   const [authReason, setAuthReason] = useState('');
   const [filters, setFilters] = useState(initialFilters);
-  const [events, setEvents] = useState(fallbackEvents);
-  const [selectedEventId, setSelectedEventId] = useState(fallbackEvents[0].id);
-  const [selectedEvent, setSelectedEvent] = useState(fallbackEvents[0]);
+  const [events, setEvents] = useState([]);
+  const [selectedEventId, setSelectedEventId] = useState('');
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [activePurchase, setActivePurchase] = useState(null);
   const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+  const [eventsLoadError, setEventsLoadError] = useState('');
+  const [favoriteIds, setFavoriteIds] = useState([]);
 
   const isAuthenticated = Boolean(user?.id || user?.email);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setFavoriteIds([]);
+      return undefined;
+    }
+
+    let ignore = false;
+    getFavoriteIds(user)
+      .then((ids) => {
+        if (!ignore) setFavoriteIds(ids);
+      })
+      .catch(() => {
+        if (!ignore) setFavoriteIds([]);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [user, isAuthenticated]);
 
   useEffect(() => {
     let ignore = false;
 
     setIsLoadingEvents(true);
+    setEventsLoadError('');
     getEvents(filters)
       .then((apiEvents) => {
         if (ignore) return;
@@ -56,7 +79,10 @@ export default function App() {
       })
       .catch(() => {
         if (ignore) return;
-        setEvents(fallbackEvents);
+        setEvents([]);
+        setEventsLoadError(
+          'We could not load events from the API. Check that VITE_API_BASE_URL points to https://service.andromeda.andrescortes.dev (not the bare VPS IP).'
+        );
       })
       .finally(() => {
         if (!ignore) setIsLoadingEvents(false);
@@ -77,6 +103,7 @@ export default function App() {
     localStorage.setItem('orbix_user', JSON.stringify(nextUser));
     setAuthReason('');
     setView('home');
+    getFavoriteIds(nextUser).then(setFavoriteIds).catch(() => setFavoriteIds([]));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -122,6 +149,17 @@ export default function App() {
     }
   };
 
+  const handleToggleFavorite = async (eventId) => {
+    if (!isAuthenticated) {
+      setAuthReason('Sign in to save events to your favorites.');
+      setView('login');
+      return;
+    }
+
+    const nextIds = await toggleFavorite(user, eventId, favoriteIds);
+    setFavoriteIds(nextIds);
+  };
+
   const goToCheckout = async (eventId) => {
     setSelectedEventId(eventId);
     const localEvent = events.find((event) => event.id === eventId);
@@ -153,8 +191,11 @@ export default function App() {
             events={events}
             filters={filters}
             isLoading={isLoadingEvents}
+            loadError={eventsLoadError}
             onFiltersChange={setFilters}
             onOpenEvent={openEvent}
+            favoriteIds={favoriteIds}
+            onToggleFavorite={handleToggleFavorite}
           />
         )}
         {view === 'detail' && (
@@ -188,7 +229,14 @@ export default function App() {
             }}
           />
         )}
-        {view === 'favorites' && <FavoritesPage events={events} onOpenEvent={openEvent} />}
+        {view === 'favorites' && (
+          <FavoritesPage
+            events={events}
+            favoriteIds={favoriteIds}
+            onOpenEvent={openEvent}
+            onToggleFavorite={handleToggleFavorite}
+          />
+        )}
         {view === 'pqrs' && <PqrsPage user={user} />}
         {view === 'login' && <LoginPage reason={authReason} onAuthenticated={handleAuthSuccess} />}
         {view === 'ticket' && <DigitalTicketPage purchase={activePurchase} onBack={() => navigate('history')} />}
